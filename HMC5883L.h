@@ -35,7 +35,7 @@ public:
 protected:
 
 	// I2C Interface
-	static const int i2c_addr = 0x3D;
+	static const int i2c_addr = 0x1E;
 	static const char reg_id_A_addr = 0x0A;
 	static const char reg_id_A_ref = 0x48;
 	static const char reg_id_B_addr = 0x0B;
