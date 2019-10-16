@@ -22,9 +22,24 @@ class HMC5883L
 {
 public:
 
+	// Full-scale range
+	typedef enum
+	{
+		range_88uT,		// +/-88uT
+		range_130uT,	// +/-130uT
+		range_190uT,	// +/-190uT
+		range_250uT,	// +/-250uT
+		range_400uT,	// +/-400uT
+		range_470uT,	// +/-470uT
+		range_560uT,	// +/-560uT
+		range_810uT,	// +/-810uT
+	}
+	range_t;
+
 	// Initialization
 	HMC5883L(I2CDEVICE_I2C_CLASS* i2c);
 	bool init();
+	void set_range(range_t range);
 
 	// Readings
 	void update();
@@ -34,22 +49,35 @@ public:
 
 protected:
 
-	// I2C Interface
+	// I2C Communication
 	static const int i2c_addr = 0x1E;
-	static const char reg_id_A_addr = 0x0A;
-	static const char reg_id_A_ref = 0x48;
-	static const char reg_id_B_addr = 0x0B;
-	static const char reg_id_B_ref = 0x34;
-	static const char reg_id_C_addr = 0x0C;
-	static const char reg_id_C_ref = 0x33;
-	static const char reg_mode_addr = 0x02;
-	static const char reg_mode_continuous = 0x00;
-	static const char reg_data_addr = 0x03;
-	static const float gauss_per_lsb = 0.00092f;
-
-	// Communication
 	I2CDevice i2c;
 
+	// I2C Interface
+	static const uint8_t reg_id_A_addr = 0x0A;
+	static const uint8_t reg_id_A_ref = 0x48;
+	static const uint8_t reg_id_B_addr = 0x0B;
+	static const uint8_t reg_id_B_ref = 0x34;
+	static const uint8_t reg_id_C_addr = 0x0C;
+	static const uint8_t reg_id_C_ref = 0x33;
+	static const uint8_t reg_mode_addr = 0x02;
+	static const uint8_t reg_mode_cont = 0x00;
+	static const uint8_t reg_config_B_addr = 0x01;
+	static const uint8_t reg_config_B_88uT = 0x0 << 5;
+	static const uint8_t reg_config_B_130uT = 0x1 << 5;
+	static const uint8_t reg_config_B_190uT = 0x2 << 5;
+	static const uint8_t reg_config_B_250uT = 0x3 << 5;
+	static const uint8_t reg_config_B_400uT = 0x4 << 5;
+	static const uint8_t reg_config_B_470uT = 0x5 << 5;
+	static const uint8_t reg_config_B_560uT = 0x6 << 5;
+	static const uint8_t reg_config_B_810uT = 0x7 << 5;
+	static const uint8_t reg_mag_x_addr = 0x03;
+	static const uint8_t reg_mag_y_addr = 0x05;
+	static const uint8_t reg_mag_z_addr = 0x07;
+	
 	// Readings
-	float mag_x, mag_y, mag_z;
+	float uT_per_lsb;
+	float mag_x; bool read_mag_x;
+	float mag_y; bool read_mag_y;
+	float mag_z; bool read_mag_z;
 };
