@@ -1,6 +1,6 @@
 /**
  * @file HMC5883L.h
- * @brief Class for interfacing with HMC5883L 3-axis magnetometer
+ * @brief Class for interfacing with the HMC5883L 3-axis I2C magnetometer
  * @author Dan Oates (WPI Class of 2020)
  * 
  * The HMC5883L is a 3-axis I2C magnetometer. This class acts as an I2C
