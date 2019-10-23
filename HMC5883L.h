@@ -60,8 +60,8 @@ protected:
 	static const uint8_t reg_config_B_560uT = 0x6 << 5;
 	static const uint8_t reg_config_B_810uT = 0x7 << 5;
 	static const uint8_t reg_mag_x_addr = 0x03;
-	static const uint8_t reg_mag_y_addr = 0x05;
-	static const uint8_t reg_mag_z_addr = 0x07;
+	static const uint8_t reg_mag_z_addr = 0x05;
+	static const uint8_t reg_mag_y_addr = 0x07;
 	
 	// Readings
 	float uT_per_lsb;

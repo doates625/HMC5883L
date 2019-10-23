@@ -104,8 +104,8 @@ void HMC5883L::update()
 {
 	i2c.read_sequence(reg_mag_x_addr, 6);
 	mag_x = i2c.read_int16() * uT_per_lsb; read_mag_x = true;
-	mag_y = i2c.read_int16() * uT_per_lsb; read_mag_y = true;
-	mag_z = i2c.read_int16() * uT_per_lsb; read_mag_z = true;
+	mag_z = i2c.read_int16() * uT_per_lsb; read_mag_y = true;
+	mag_y = i2c.read_int16() * uT_per_lsb; read_mag_z = true;
 }
 
 /**
