@@ -25,7 +25,7 @@ public:
 	range_t;
 
 	// Initialization
-	HMC5883L(I2CDEVICE_I2C_CLASS* i2c);
+	HMC5883L(I2CDevice::i2c_t* i2c);
 	bool init();
 	void set_range(range_t range);
 
