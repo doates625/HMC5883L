@@ -5,6 +5,13 @@
 #include "HMC5883L.h"
 
 /**
+ * I2C Buffer Size Macro
+ */
+#if I2CDEVICE_BUFFER_SIZE < 6
+	#error HMC5883L requires I2CDEVICE_BUFFER_SIZE >= 6
+#endif
+
+/**
  * @brief Constructs new magnetometer with given I2C interface
  */
 HMC5883L::HMC5883L(I2CDevice::i2c_t* i2c) :
