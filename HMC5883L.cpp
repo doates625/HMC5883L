@@ -15,11 +15,12 @@
  * @brief Constructs new magnetometer with given I2C interface
  */
 HMC5883L::HMC5883L(I2CDevice::i2c_t* i2c) :
-	i2c(i2c, i2c_addr, Struct::msb_first)
+	i2c(i2c, i2c_addr, Struct::msb_first),
+	mag_x(&(this->i2c), reg_mag_x_addr),
+	mag_y(&(this->i2c), reg_mag_y_addr),
+	mag_z(&(this->i2c), reg_mag_z_addr)
 {
-	this->mag_x = 0.0f; this->read_mag_x = false;
-	this->mag_y = 0.0f; this->read_mag_y = false;
-	this->mag_z = 0.0f; this->read_mag_z = false;
+	return;
 }
 
 /**
@@ -39,7 +40,7 @@ bool HMC5883L::init()
 	if (reg_id_B_test != reg_id_B_ref) return false;
 	if (reg_id_C_test != reg_id_C_ref) return false;
 
-	// Set range to 1300mG (default)
+	// Set range to 130uT (default)
 	set_range(range_130uT);
 
 	// Set device to continuous sampling
@@ -54,7 +55,7 @@ bool HMC5883L::init()
  * @param range Full-scale range [enum]
  * 
  * Range options:
- * - range_88uT = +/-88uT
+ * - range_088uT = +/-088uT
  * - range_130uT = +/-130uT
  * - range_190uT = +/-190uT
  * - range_250uT = +/-250uT
@@ -68,38 +69,14 @@ void HMC5883L::set_range(range_t range)
 	uint8_t reg_val = 0x00;
 	switch (range)
 	{
-		case range_88uT:
-			reg_val = reg_config_B_88uT;
-			uT_per_lsb = 0.073f;
-			break;
-		case range_130uT:
-			reg_val = reg_config_B_130uT;
-			uT_per_lsb = 0.092f;
-			break;
-		case range_190uT:
-			reg_val = reg_config_B_190uT;
-			uT_per_lsb = 0.122f;
-			break;
-		case range_250uT:
-			reg_val = reg_config_B_250uT;
-			uT_per_lsb = 0.152f;
-			break;
-		case range_400uT:
-			reg_val = reg_config_B_400uT;
-			uT_per_lsb = 0.227f;
-			break;
-		case range_470uT:
-			reg_val = reg_config_B_470uT;
-			uT_per_lsb = 0.256f;
-			break;
-		case range_560uT:
-			reg_val = reg_config_B_560uT;
-			uT_per_lsb = 0.303f;
-			break;
-		case range_810uT:
-			reg_val = reg_config_B_810uT;
-			uT_per_lsb = 0.435f;
-			break;
+		case range_088uT: reg_val = reg_config_B_088uT; uT_per_lsb = 0.073f; break;
+		case range_130uT: reg_val = reg_config_B_130uT; uT_per_lsb = 0.092f; break;
+		case range_190uT: reg_val = reg_config_B_190uT; uT_per_lsb = 0.122f; break;
+		case range_250uT: reg_val = reg_config_B_250uT; uT_per_lsb = 0.152f; break;
+		case range_400uT: reg_val = reg_config_B_400uT; uT_per_lsb = 0.227f; break;
+		case range_470uT: reg_val = reg_config_B_470uT; uT_per_lsb = 0.256f; break;
+		case range_560uT: reg_val = reg_config_B_560uT; uT_per_lsb = 0.303f; break;
+		case range_810uT: reg_val = reg_config_B_810uT; uT_per_lsb = 0.435f; break;
 	}
 	i2c.set(reg_config_B_addr, reg_val);
 }
@@ -110,9 +87,9 @@ void HMC5883L::set_range(range_t range)
 void HMC5883L::update()
 {
 	i2c.get_seq(reg_mag_x_addr, 6);
-	mag_x = (int16_t)i2c * uT_per_lsb; read_mag_x = true;
-	mag_z = (int16_t)i2c * uT_per_lsb; read_mag_y = true;
-	mag_y = (int16_t)i2c * uT_per_lsb; read_mag_z = true;
+	mag_x.update();
+	mag_z.update();
+	mag_y.update();
 }
 
 /**
@@ -120,12 +97,7 @@ void HMC5883L::update()
  */
 float HMC5883L::get_mag_x()
 {
-	if (read_mag_x)
-	{
-		read_mag_x = false;
-		return mag_x;
-	}
-	return (int16_t)i2c.get_seq(reg_mag_x_addr, 2) * uT_per_lsb;
+	return mag_x * uT_per_lsb;
 }
 
 /**
@@ -133,12 +105,7 @@ float HMC5883L::get_mag_x()
  */
 float HMC5883L::get_mag_y()
 {
-	if (read_mag_y)
-	{
-		read_mag_y = false;
-		return mag_y;
-	}
-	return (int16_t)i2c.get_seq(reg_mag_y_addr, 2) * uT_per_lsb;
+	return mag_y * uT_per_lsb;
 }
 
 /**
@@ -146,10 +113,5 @@ float HMC5883L::get_mag_y()
  */
 float HMC5883L::get_mag_z()
 {
-	if (read_mag_z)
-	{
-		read_mag_z = false;
-		return mag_z;
-	}
-	return (int16_t)i2c.get_seq(reg_mag_z_addr, 2) * uT_per_lsb;
+	return mag_z * uT_per_lsb;
 }

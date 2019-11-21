@@ -8,6 +8,7 @@ The HMC5883L is a 3-axis I2C magnetometer (compass sensor). This class acts as a
 ### Dependencies
 - [Platform](https://github.com/doates625/Platform.git)
 - [I2CDevice](https://github.com/doates625/I2CDevice.git)
+- [I2CReading](https://github.com/doates625/I2CReading.git)
 - [Struct](https://github.com/doates625/Struct.git)
 
 ### References

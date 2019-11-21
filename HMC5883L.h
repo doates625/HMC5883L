@@ -5,6 +5,7 @@
  */
 #pragma once
 #include <I2CDevice.h>
+#include <I2CReading.h>
 
 class HMC5883L
 {
@@ -13,7 +14,7 @@ public:
 	// Full-scale range
 	typedef enum
 	{
-		range_88uT,		// +/-88uT
+		range_088uT,	// +/-088uT
 		range_130uT,	// +/-130uT
 		range_190uT,	// +/-190uT
 		range_250uT,	// +/-250uT
@@ -51,7 +52,7 @@ protected:
 	static const uint8_t reg_mode_addr = 0x02;
 	static const uint8_t reg_mode_cont = 0x00;
 	static const uint8_t reg_config_B_addr = 0x01;
-	static const uint8_t reg_config_B_88uT = 0x0 << 5;
+	static const uint8_t reg_config_B_088uT = 0x0 << 5;
 	static const uint8_t reg_config_B_130uT = 0x1 << 5;
 	static const uint8_t reg_config_B_190uT = 0x2 << 5;
 	static const uint8_t reg_config_B_250uT = 0x3 << 5;
@@ -65,7 +66,5 @@ protected:
 	
 	// Readings
 	float uT_per_lsb;
-	float mag_x; bool read_mag_x;
-	float mag_y; bool read_mag_y;
-	float mag_z; bool read_mag_z;
+	I2CReading<int16_t> mag_x, mag_y, mag_z;
 };
