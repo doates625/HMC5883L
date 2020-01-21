@@ -20,7 +20,9 @@ HMC5883L::HMC5883L(I2CDevice::i2c_t* i2c) :
 	mag_y(&(this->i2c), reg_mag_y_addr),
 	mag_z(&(this->i2c), reg_mag_z_addr)
 {
-	return;
+	this->x_cal = 0.0f;
+	this->y_cal = 0.0f;
+	this->z_cal = 0.0f;
 }
 
 /**
@@ -95,23 +97,23 @@ void HMC5883L::update()
 /**
  * @brief Returns magnetic field X [uT]
  */
-float HMC5883L::get_mag_x()
+float HMC5883L::get_x()
 {
-	return mag_x * uT_per_lsb;
+	return mag_x * uT_per_lsb - x_cal;
 }
 
 /**
  * @brief Returns magnetic field Y [uT]
  */
-float HMC5883L::get_mag_y()
+float HMC5883L::get_y()
 {
-	return mag_y * uT_per_lsb;
+	return mag_y * uT_per_lsb - y_cal;
 }
 
 /**
  * @brief Returns magnetic field Z [uT]
  */
-float HMC5883L::get_mag_z()
+float HMC5883L::get_z()
 {
-	return mag_z * uT_per_lsb;
+	return mag_z * uT_per_lsb - z_cal;
 }

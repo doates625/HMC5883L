@@ -25,6 +25,11 @@ public:
 	}
 	range_t;
 
+	// Calibrations
+	float x_cal;	// X offset [uT]
+	float y_cal;	// Y offset [uT]
+	float z_cal;	// Z offset [uT]
+
 	// Initialization
 	HMC5883L(I2CDevice::i2c_t* i2c);
 	bool init();
@@ -32,9 +37,9 @@ public:
 
 	// Readings
 	void update();
-	float get_mag_x();
-	float get_mag_y();
-	float get_mag_z();
+	float get_x();
+	float get_y();
+	float get_z();
 
 protected:
 
